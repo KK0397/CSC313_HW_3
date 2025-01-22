@@ -162,5 +162,103 @@ public class Asteroids {
         }
     }
 
+    private static class PlayerMover implements Runnable
+    {
+        public PlayerMover()
+        {
+            velocitystep = 0.01;
+            rotatestep = 0.01;
+        }
+        public void run()
+        {
+            while (endgame == false)
+            {
+                try
+                {
+                    Thread.sleep(10);
+                }
+                catch(InterruptedException e)
+                {
+                    // NOP
+                }
+                if (upPressed == true)
+                {
+                    p1velocity = p1velocity + velocitystep;
+                }
+                if (downPressed = true)
+                {
+                    p1velocity = p1velocity - velocitystep;
+                }
+                if (leftPressed == true)
+                {
+                    if (p1velocity < 0)
+                    {
+                        p1.rotate(-rotatestep);
+                    }
+                    else
+                    {
+                        p1.rotate(rotatestep);
+                    }
+                }
+                if (rightPressed == true)
+                {
+                    if (p1velocity < 0)
+                    {
+                        p1.rotate(rotatestep);
+                    }
+                    else
+                    {
+                        p1.rotate(-rotatestep);
+                    }
+                }
+                if (firePressed == true)
+                {
+                    try
+                    {
+                        if (playerBullets.size() == 0)
+                        {
+                            insertPlayerBullet();
+                        }
+                        else if (System.currentTimeMillis() -
+                        playerBulletsTimes.elementAt(
+                                playerBulletsTimes.size() - 1) >
+                                playerbulletlifetime / 4.0)
+                        {
+                            insertPlayerBullet();
+                        }
+                    }
+                    catch (java.lang.ArrayIndexOutOfBoundsException aioobe)
+                    {
+                        // NOP
+                    }
+                }
+
+                p1.move(-p1velocity * Math.cos(p1.getAngle() -
+                        p1 / 2.0), p1velocity * Math.sin(p1.getAngle()
+                - pi / 2.0));
+                p1.screenWrap(XOFFSET, XOFFSET + WINWIDTH,
+                        YOFFSET, YOFFSET + WINHEIGHT);
+            }
+        }
+        private double velocitystep;
+        private double rotatestep;
+    }
+
+    private static class FlameMover implements Runnable
+    {
+        public FlameMover()
+        {
+            gap = 7.0;
+        }
+        public void run()
+        {
+            while (endgame == false)
+            {
+                lockrotateObjAroundObjbottom(flames, p1, gap);
+            }
+        }
+        private double gap;
+    }
+
 
 }
