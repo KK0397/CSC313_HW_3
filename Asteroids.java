@@ -105,4 +105,62 @@ public class Asteroids {
             // NOP
         }
     }
+
+    private static class Animate implements Runnable
+    {
+        public void run()
+        {
+            while (endgame == false)
+            {
+                backgroundDraw();
+                asteroidsDraw();
+                explosionsDraw();
+                enemyBulletsDraw();
+                enemyDraw();
+                playerBulletsDraw();
+                playerDraw();
+                flameDraw();
+
+                try
+                {
+                    Thread.sleep(32);
+                }
+                catch(InterruptedException e)
+                {
+                    // NOP
+                }
+            }
+        }
+    }
+
+    private static void insertPlayerBullet()
+    {
+        ImageObject bullet = new ImageObject(0, 0, bulletWidth,
+                bulletWidth, p1.getAngle());
+        lockrotateObjAroundObjtop(bullet, p1, p1width / 2.0);
+        playerBullets.addElement(bullet);
+        playerBulletsTimes.addElement(System.currentTimeMillis());
+    }
+
+    private static void insertEnemyBullet()
+    {
+        try
+        {
+            // randomize angle here
+            Random randomNumbers = new Random(LocalTime.now().getNano());
+
+            ImageObject bullet = new ImageObject(enemy.getX() +
+                    enemy.getWidth()/2.0, enemy.getY() + enemy.getHeight() / 2.0,
+                    bulletWidth, bulletWidth, randomNumbers.nextInt(360));
+            //lockrorateObjAroundObjbottom(bullet, enemy, enemy.getWidth()/2.0);
+            enemyBullets.addElement(bullet);
+            enemyBulletsTimes.addElement(System.currentTimeMillis());
+        }
+        catch(java.lang.NullPointerException jlnpe)
+        {
+            // NOP
+        }
+    }
+
+
 }
