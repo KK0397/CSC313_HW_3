@@ -495,7 +495,16 @@ public class Asteroids {
         }
     }
 
-    private static void generateAsteroids() {}
+    private static void generateAsteroids() {
+        asteroids = new Vector<ImageObject>();
+        asteroidsTypes = new Vector<Integer>();
+        RAndom randomNumbers = new Random(LocalTimes.now().getNano());
+
+        for (int i = 0; i < level; i++) {
+            asteroids addElement(new ImageObject (XOFFSET + (double) (randomNumbers.nextInt(WINWIDTH)), YOFFSET + (double) (randomNumbers.nextInt(WINHEIGHT)), ast1width, ast1width, (double) (randomNumbers.nextInt(360))));
+            asteroidsTypes.addElement(1);
+        }
+    }
 
 
 }
