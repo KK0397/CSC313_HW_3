@@ -34,8 +34,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 
 public class Asteroids {
-    public Asteroids()
-    {
+    public Asteroids() {
         setup();
     }
 
@@ -77,8 +76,7 @@ public class Asteroids {
         ast2width = 21;
         ast3width = 26;
 
-        try
-        {
+        try {
             background = ImageIO.read(newFile("space.png"));
 
             player = ImageIO.read(newFile("player.png"));
@@ -100,18 +98,14 @@ public class Asteroids {
             exp1 = ImageIO.read(newFile("explosion1.png"));
             exp2 = ImageIO.read(newFile("explosion2.png"));
         }
-        catch(IOException ioe)
-        {
+        catch(IOException ioe) {
             // NOP
         }
     }
 
-    private static class Animate implements Runnable
-    {
-        public void run()
-        {
-            while (endgame == false)
-            {
+    private static class Animate implements Runnable {
+        public void run() {
+            while (endgame == false) {
                 backgroundDraw();
                 asteroidsDraw();
                 explosionsDraw();
@@ -121,20 +115,17 @@ public class Asteroids {
                 playerDraw();
                 flameDraw();
 
-                try
-                {
+                try {
                     Thread.sleep(32);
                 }
-                catch(InterruptedException e)
-                {
+                catch(InterruptedException e) {
                     // NOP
                 }
             }
         }
     }
 
-    private static void insertPlayerBullet()
-    {
+    private static void insertPlayerBullet() {
         ImageObject bullet = new ImageObject(0, 0, bulletWidth,
                 bulletWidth, p1.getAngle());
         lockrotateObjAroundObjtop(bullet, p1, p1width / 2.0);
@@ -142,10 +133,8 @@ public class Asteroids {
         playerBulletsTimes.addElement(System.currentTimeMillis());
     }
 
-    private static void insertEnemyBullet()
-    {
-        try
-        {
+    private static void insertEnemyBullet() {
+        try {
             // randomize angle here
             Random randomNumbers = new Random(LocalTime.now().getNano());
 
@@ -156,79 +145,60 @@ public class Asteroids {
             enemyBullets.addElement(bullet);
             enemyBulletsTimes.addElement(System.currentTimeMillis());
         }
-        catch(java.lang.NullPointerException jlnpe)
-        {
+        catch(java.lang.NullPointerException jlnpe) {
             // NOP
         }
     }
 
     private static class PlayerMover implements Runnable
     {
-        public PlayerMover()
-        {
+        public PlayerMover() {
             velocitystep = 0.01;
             rotatestep = 0.01;
         }
-        public void run()
-        {
-            while (endgame == false)
-            {
-                try
-                {
+        public void run() {
+            while (endgame == false) {
+                try {
                     Thread.sleep(10);
                 }
-                catch(InterruptedException e)
-                {
+                catch(InterruptedException e) {
                     // NOP
                 }
-                if (upPressed == true)
-                {
+                if (upPressed == true) {
                     p1velocity = p1velocity + velocitystep;
                 }
-                if (downPressed = true)
-                {
+                if (downPressed = true) {
                     p1velocity = p1velocity - velocitystep;
                 }
-                if (leftPressed == true)
-                {
-                    if (p1velocity < 0)
-                    {
+                if (leftPressed == true) {
+                    if (p1velocity < 0) {
                         p1.rotate(-rotatestep);
                     }
-                    else
-                    {
+                    else {
                         p1.rotate(rotatestep);
                     }
                 }
-                if (rightPressed == true)
-                {
-                    if (p1velocity < 0)
-                    {
+                if (rightPressed == true) {
+                    if (p1velocity < 0) {
                         p1.rotate(rotatestep);
                     }
-                    else
-                    {
+                    else {
                         p1.rotate(-rotatestep);
                     }
                 }
-                if (firePressed == true)
-                {
-                    try
-                    {
-                        if (playerBullets.size() == 0)
-                        {
+                if (firePressed == true) {
+                    try {
+                        if (playerBullets.size() == 0) {
                             insertPlayerBullet();
                         }
                         else if (System.currentTimeMillis() -
                         playerBulletsTimes.elementAt(
                                 playerBulletsTimes.size() - 1) >
-                                playerbulletlifetime / 4.0)
-                        {
+                                playerbulletlifetime / 4.0) {
                             insertPlayerBullet();
                         }
                     }
-                    catch (java.lang.ArrayIndexOutOfBoundsException aioobe)
-                    {
+                    catch (java.lang.ArrayIndexOutOfBoundsException aioobe) {
                         // NOP
                     }
                 }
@@ -250,10 +220,8 @@ public class Asteroids {
         {
             gap = 7.0;
         }
-        public void run()
-        {
-            while (endgame == false)
-            {
+        public void run() {
+            while (endgame == false) {
                 lockrotateObjAroundObjbottom(flames, p1, gap);
             }
         }
@@ -381,7 +349,7 @@ public class Asteroids {
             velocity = 1.2;
         }
         public void run() {
-            while (engame == false && enemyAlive == true) {
+            while (endgame == false && enemyAlive == true) {
                 try {
                     // controls bullet speed
                     Thread.sleep(4);
