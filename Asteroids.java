@@ -260,5 +260,156 @@ public class Asteroids {
         private double gap;
     }
 
+    private static class AsteroidsMover implements Runnable {
+        public AsteroidsMover() {
+            velocity = 0.1;
+            spinstep = 0.01;
+            spindirection = new Vector<Integer>();
+        }
+
+        public void run() {
+            Random randomNumbers = new Random(LocalTime.now().getNano());
+            for (int i = 0; i < asteroids.size(); i++) {
+                spindirection.addElement(randomNumbers.nextInt(2));
+            }
+            while (endgame == false) {
+                try {
+                    Thread.sleep(1);
+                }
+                catch (InterruptedException e) {
+                    // NOP
+                }
+
+                try {
+                    for (int i = 0; i < asteroids.size(); i++) {
+                        if (spindirection.elementAt(i) < 1) {
+                            asteroids.elementAt(i).spin(-spinstep);
+                        }
+                        else {
+                            asteroids.elementAt(i).spin(spinstep);
+                        }
+                        asteroids.elementAt(i)/move(-velocity *
+                                Math.cos(asteroids.elementAt(i).getAngle() - pi / 2.0),
+                                velocity * Math.sin(asteroids.elementAt(i).getAngle() - pi / 2.0));
+                        asteroids.elementAt(i).screenWrap(XOFFSET, XOFFSET + WIDTH,
+                                YOFFSET, YOFFSET + WINHEIGHT);
+                    }
+                }
+                catch(java.lang.ArrayIndexOutOfBoundsException jlaioobe) {
+                    // NOP
+                }
+            }
+        }
+        private double velocity;
+        private double spinstep;
+        private Vector<Integer> spindirection;
+    }
+
+    public static class PlayerBulletsMover implements Runnable {
+        public PlayerBulletsMover() {
+            velocity = 1.0;
+        }
+        public void run() {
+            while (endgame == false) {
+                try {
+                    // controls bullet speed
+                    Thread.sleep(4);
+                }
+                catch(InterruptedException e) {
+                    // NOP
+                }
+
+                try {
+                    for (int i = 0; i < playerBullets.size(); i++) {
+                        playerBullets.elementAt(i).move(-velocity * Math.cos(playerBullets.elementAt(i).getAngle() - pi / 2.0),
+                                velocity * Math.sin(playerBullets.elementAt(i).getAngle() - pi / 2.0));
+                        playerBullets.elementAt(i).screenWrap(XOFFSET, XOFFSET + WINWIDTH,
+                                YOFFSET, YOFFSET + WINHEIGHT);
+
+                        if (System.currentTimeMillis() - playerBulletsTimes.elementAt(i)
+                                > playerbulletlifetime) {
+                            playerBullets.remove(i);
+                            playerBulletsTimes.remove(i);
+                        }
+                    }
+                }
+                catch (java.lang.ArrayIndexOutOfBoundsException aie) {
+                    playerBullets.clear();
+                    playerBulletsTimes.clear();
+                }
+            }
+        }
+        private double velocity;
+    }
+
+    private static class EnemyShipMover implements Runnable {
+        public EnemyShipMover() {
+            velocity = 1.0;
+        }
+        public void run() {
+            while (endgame == false && enemyAlive == true) {
+                try {
+                    enemy.move(-velocity * Math.cos(enemy.getAngle() - pi / 2.0),
+                            velocity * Math.sin(enemy.getAngle() - pi / 2.0));
+                    enemy.screenWrap(XOFFSET, XOFFSET + WINWIDTH, YOFFSET, YOFFSET + WINHEIGHT);
+                }
+                catch (java.lang.NullPointerException jlnpe) {
+                    // NOP
+                }
+
+                try {
+                    if (enemyAlive == true) {
+                        if (enemyBullets.size() == 0) {
+                            insertEnemyBullet();
+                        }
+                        else if (System.currentTimeMillis() - enemyBulletsTimes.elementAt(enemyBulletsTimes.size() - 1)
+                                > enemybulletlifetime / 4.0) {
+                            insertEnemyBullet();
+                        }
+                    }
+                }
+                catch (java.lang.ArrayIndexOutOfBoundsException aioobe) {
+                    // NOP
+                }
+            }
+        }
+        private double velocity;
+    }
+
+    private static class EnemyBulletsMover implements Runnable {
+        public EnemyBulletsMover() {
+            velocity = 1.2;
+        }
+        public void run() {
+            while (engame == false && enemyAlive == true) {
+                try {
+                    // controls bullet speed
+                    Thread.sleep(4);
+                }
+                catch (InterruptedException e) {
+                    // NOP
+                }
+
+                try {
+                    for (int i = 0; i < enemyBullets.size(); i++) {
+                        enemyBullets.elementAt(i).move(-velocity * Math.cos(enemyBullets.elementAt(i).getAngle() - pi / 2.0),
+                                velocity * Math.sin(enemyBullets.elementAt(i).getAngle() - pi / 2.0));
+                        enemyBulllets.elementAt(i).screenWrap(XOFFSET, XOFFSET + WINWIDTH, YOFFSET, YOFFSET + WINHEIGHT);
+
+                        if (System.currentTimeMillis() - elementBulletsTimes.elementAt(i) > enemybulletlifetime) {
+                            enemyBullets.remove(i);
+                            enemyBulletsTimes.remove(i);
+                        }
+                    }
+                }
+                catch (java.lang.ArrayIndexOutOfBoundsException aie) {
+                    enemyBullets.clear();
+                    enemyBulletsTimes.clear();
+                }
+            }
+        }
+        private double velocity;
+    }
+
 
 }
