@@ -379,5 +379,123 @@ public class Asteroids {
         private double velocity;
     }
 
+    private static class CollisionChecker implements Runnable {
+        public void run() {
+            Random randomNumbers = new Random (LocalTime.now().getNano());
+            while (endgame == false) {
+                try {
+                    // compares all asteroids to all player bullets
+                    for (int i = 0; i < asteroids.size(); i++) {
+                        for (int j = 0; j < playerBullets.size(); j++) {
+                            if (collisionOccurs(asteroids.elementAt(i),
+                                    playerBullets.elementAt(j)) == true) {
+                                // delete asteroid
+                                // show explosion animation
+                                // replace old asteroid with two new, smaller asteroids
+                                    // at same place, random directions.
+                                double posX = asteroids.elementAt(i).getX();
+                                double posY = asteroids.elementAt(i).getY();
+
+                                // create explosion!
+                                explosions.addElement(new ImageObject(posX, posY, 27, 24, 0.0));
+                                explosionsTimes.addElement(System.currentTimeMillis());
+
+                                // create two new asteroids of type 2
+                                if (asteroidsTypes.elementAt(i) == 1) {
+                                    asteroids.addElement(new ImageObject(posX, posY, ast2width, ast2width, (double) (randomNumbers.nextInt(360))));
+                                    asteroidsTypes.addElement(2);
+                                    asteroids.remove(i);
+                                    asteroidsTypes.remove(i);
+                                    playerBullets.remove(j);
+                                    playerBullesTimes.remove(j);
+                                }
+
+                                // create two new asteroids of type 3
+                                if (asteroidsTypes.elementAt(i) == 2) {
+                                    asteroids.addElement(new ImageObject(posX, posY, ast3width, ast3width, (double) (randomNumbers.nextInt(360))));
+                                    asteroidsTypes.addElement(3);
+                                    asteroids.remove(i);
+                                    asteroidsTypes.remove(i);
+                                    playerBullets.remove(j);
+                                    playerBullesTimes.remove(j);
+                                }
+
+                                // delete asteroids
+                                if (asteroids.Types.elementAt(i) == 3) {
+                                    asteroids.remove(i);
+                                    asteroidsTypes.remove(i);
+                                    playerBullets.remove(j);
+                                    playerBullesTimes.remove(j);
+                                }
+                            }
+                        }
+                    }
+
+                    // compare all asteroids to player
+                    for (int i = 0; i < asteroids.size(); i++) {
+                        if (collisionOccurs(asteroids.elementAt(i), p1) == true) {
+                            endgame = true;
+                            System.out.println("Game Over. You lose!");
+                        }
+                    }
+
+                    try {
+                        // compare all player bullets to enemy ship
+                        for (int i = 0; i < playerBullets.size(); i++) {
+                            if (collisionOccurs(playerBullets.elementAt(i), enemy) == true) {
+                                double posX = enemy.getX();
+                                double posY = enemy.getY();
+
+                                // create explosion!
+                                explosions.addElement(new ImageObject(posX, posY, 27, 24, 0.0));
+                                explosionsTimes.addElement(System.currentTimeMillis());
+
+                                playerBullets.remove(i);
+                                playerBulletsTimes.remove(i);
+                                enemyAlive = false;
+                                enemy = null;
+                                enemyBullets.clear();
+                                enemyBulletsTimes.clear();
+                            }
+                        }
+
+                        // compare enemy ship to player
+                        if (collisionOccurs(enemy, p1) == true) {
+                            endgame == true;
+                            System.out.println("Game Over. You Lose!");
+                        }
+
+                        // compare all enemy bullets to player
+                        for (int i = 0; i < enemyBullets.size(); i++) {
+                            if (collisionOccurs(enemyBullets.elementAt(i), p1) == true) {
+                                endgame = true;
+                                System.out.println("Game Over. You Lose!");
+                            }
+                        }
+                    }
+                    catch(java.lang.NullPointerException jlnpe) {
+                        // NOP
+                    }
+                }
+                catch (java.lang.ArrayIndexOutOfBoundsException jlaioobe) {
+                    //NOP
+                }
+            }
+        }
+    }
+
+    private static class WinChecker implements Runnable {
+        public void run() {
+            while (endgame == false) {
+                if (asteroids.size() == 0) {
+                    endgame = true;
+                    System.out.println("Game Over. You Lose!");
+                }
+            }
+        }
+    }
+
+    private static void generateAsteroids() {}
+
 
 }
