@@ -501,10 +501,108 @@ public class Asteroids {
         RAndom randomNumbers = new Random(LocalTimes.now().getNano());
 
         for (int i = 0; i < level; i++) {
-            asteroids addElement(new ImageObject (XOFFSET + (double) (randomNumbers.nextInt(WINWIDTH)), YOFFSET + (double) (randomNumbers.nextInt(WINHEIGHT)), ast1width, ast1width, (double) (randomNumbers.nextInt(360))));
+            asteroids addElement(new ImageObject (XOFFSET +
+                    (double) (randomNumbers.nextInt(WINWIDTH)), YOFFSET +
+                    (double) (randomNumbers.nextInt(WINHEIGHT)), ast1width, ast1width,
+                    (double) (randomNumbers.nextInt(360))));
             asteroidsTypes.addElement(1);
         }
     }
+
+    private static void generateEnemy() {
+        try {
+            Random randomNumbers = new Random(LocalTime.now().getNano());
+            enemy = new ImageObject (XOFFSET + (double) (randomNumbers.nextInt(WINWIDTH)),
+                    YOFFSET + (double) (randomNumbers.nextInt(WINHEIGHT)), 29.0, 16.0,
+                    (double) (randomNumbers.nextInt(360)));
+        }
+        catch (java.lang.IllegalArgumentException jliae) {
+            // NOP
+        }
+    }
+
+    // *dist is a distance between the two objects at the bottom of objInner
+    private static void lockrotateObjAroundObjbottom (ImageObject objOuter, ImageObject objInner, double dist) {
+        objOuter.moteto(objInner.getX() + objOuter.getWidth() + (objInner.getWidth() / 2.0 +
+                (dist + objInner.getWidth() / 2.0) * Math.cos(-objInner.getAngle() + pi / 2.0))
+                / 2.0, objInner.getY() - objOuter.getHeight() + (dist + objInner.getHieght() / 2.0)
+                * Math.sin(-objInner.getAngle() / 2.0));
+        objOuter.setAngle(objInner.getAngle());
+    }
+
+    // *dist is a distance between the two objects at the top of the inner object
+    private static void lockrotateObjAroundObjtop (ImageObject objOuter, ImageObject objInner, double dist) {
+        objOuter.moteto(objInner.getX() + objOuter.getWidth() + (objInner.getWidth() / 2.0 +
+                (dist + objInner.getWidth() / 2.0) * Math.cos(objInner.getAngle() + pi / 2.0))
+                / 2.0, objInner.getY() - objOuter.getHeight() + (dist + objInner.getHieght() / 2.0)
+                * Math.sin(objInner.getAngle() / 2.0));
+        objOuter.setAngle(objInner.getAngle());
+    }
+
+    private static AffineTransformOp rotateImageObject (ImageObject obj) {
+        AffineTransform at = AffineTransform.getRotateInstance(-obj.getAngle(),
+                obj.getWidth() / 2.0, obj.getHeight() / 2.0);
+        AffineTransformOp atop = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+        return atop;
+    }
+
+    private static AffineTransformOp spinImageObject (ImageObject obj) {
+        AffineTransform at = AffineTransform.getRotateInstance(-obj.getInternalAngle(),
+                obj.getWIdth() / 2.0, obj.getHeight() / 2.0);
+        AffineTransformOp atop = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+        return atop;
+    }
+
+    private static void backgroundDraw() {
+        Graphics g = appFrame.getGraphics();
+        Graphics2D g2D = (Graphics2D) g;
+        g2D.drawImage(background, XOFFSET, YOFFSET, null);
+    }
+
+    private static void enemyBulletsDraw() {
+        Graphics g = appFrame.getGraphics();
+        Graphics2D g2D = (Graphics2D) g;
+        for(int i = 0; i < enemyBullets.size(); i++) {
+            g2D.drawImage(enemyBullet, (int) (enemyBullets.elementAt(i).getX() + 0.5),
+                    (int) (enemyBullets.elementAt(i).getY() + 0.5), null);
+        }
+    }
+
+    private static void enemyDraw() {
+        if (enemyAlive == true) {
+            try {
+                Graphics g = appFrame.getGraphics();
+                Graphics2D g2D = (Graphics2D) g;
+                g2D.drawImage(enemyShip, (int) (enemy.getX() + 0.5), (int) (enemy.getY() + 0.5), null);
+            }
+            catch (java.lang.NullPointerException jlnpe) {
+                // NOP
+            }
+        }
+    }
+
+    private static void playerBulletsDraw() {
+        Graphics g = appFrame.getGraphics();
+        Graphics2D g2D = (Graphics2D) g;
+        try {
+            for (int i = 0; i < playerBullets.size(); i ++) {
+                g2d.drawImage(rotateImageObject(playerBullets.elementAt(i)).filter(playerBullet, null),
+                        (int) (playerBullets.elementAt(i).getX() + 0.5), (int) (playerBullets.elementAt(i).getY() + 0.5), null);
+            }
+        }
+        catch (java.lang.ArrayIndexOutOfBoundsException aioobe) {
+            playerBullets.clear();
+            playerBulletsTimes.clear();
+        }
+    }
+
+    private static void playerDraw() {
+        Graphics g = appFrame.getGraphics();
+        Graphics2D g2D = (Graphics2D) g;
+        g2D.drawImage(rotateImageObject(p1).filter(player, null), (int) (p1.getX() + 0.5), (int) (p1.getY() + 0.5), null);
+    }
+
+
 
 
 }
