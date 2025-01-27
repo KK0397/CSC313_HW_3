@@ -602,6 +602,88 @@ public class Asteroids {
         g2D.drawImage(rotateImageObject(p1).filter(player, null), (int) (p1.getX() + 0.5), (int) (p1.getY() + 0.5), null);
     }
 
+    private static void flameDraw() {
+        if (upPressed == true) {
+            Graphics g = appFrame.getGraphics();
+            Graphics2D g2D = (Graphics2D) g;
+            if (flamecount == 1) {
+                g2D.drawImage(rotateImageObject(flames).filter(flame1, null), (int) (flames.getX() + 0.5), (int) (flames.getY() + 0.5), null);
+                flamecount = 1 + ((flamecount + 1) % 3);
+            }
+            else if (flamecount == 2) {
+                g2D.drawImage(rotateImageObject(flames).filter(flame2, null), (int) (flames.getX() + 0.5), (int) (flames.getY() + 0.5), null);
+                flamecount = 1 + ((flamecount + 1) % 3);
+            }
+            else if (flamecount == 3) {
+                g2D.drawImage(rotateImageObject(flames).filter(flame3, null), (int) (flames.getX() + 0.5), (int) (flames.getY() + 0.5), null);
+                flamecount = 1 + ((flamecount + 1) % 3);
+            }
+        }
+        if (downPressed == true) {
+            Graphics g = appFrame.getGraphics();
+            Graphics2D g2D = (Graphics2D) g;
+            if (flamecount == 1) {
+                g2D.drawImage(rotateImageObject(flames).filter(flame4, null), (int) (flames.getX() + 0.5), (int) (flames.getY() + 0.5), null);
+                flamecount = 1 + ((flamecount + 1) % 3);
+            }
+            else if (flamecount == 2) {
+                g2D.drawImage(rotateImageObject(flames).filter(flame5, null), (int) (flames.getX() + 0.5), (int) (flames.getY() + 0.5), null);
+                flamecount = 1 + ((flamecount + 1) % 3);
+            }
+            else if (flamecount == 3) {
+                g2D.drawImage(rotateImageObject(flames).filter(flame6, null), (int) (flames.getX() + 0.5), (int) (flames.getY() + 0.5), null);
+                flamecount = 1 + ((flamecount + 1) % 3);
+            }
+        }
+    }
+
+    private static void asteroidsDraw() {
+        Graphics g = appFrame.getGraphics();
+        Graphics2D g2D = (Graphics2D) g;
+        for (int i = 0; i < asteroids.size(); i++) {
+            if (asteroidsTypes.elementAt(i) == 1) {
+                g2D.drawImage(spinImageObject(asteroids.elementAt(i)).filter(ast1, null), (int) (asteroids.elementAt(i).getX() + 0.5),
+                        (int) (asteroids.elementAt(i).getY() + 0.5), null);
+            }
+            if (asteroidsTypes.elementAt(i) == 2) {
+                g2D.drawImage(spinImageObject(asteroids.elementAt(i)).filter(ast2, null), (int) (asteroids.elementAt(i).getX() + 0.5),
+                        (int) (asteroids.elementAt(i).getY() + 0.5), null);
+            }
+            if (asteroidsTypes.elementAt(i) == 3) {
+                g2D.drawImage(spinImageObject(asteroids.elementAt(i)).filter(ast3, null), (int) (asteroids.elementAt(i).getX() + 0.5),
+                        (int) (asteroids.elementAt(i).getY() + 0.5), null);
+            }
+        }
+    }
+
+    private static void explosionsDraw() {
+        Graphics g = appFrame.getGraphics();
+        Graphics2D g2D = (Graphics2D) g;
+        for (int i = 0; i < explosions.size(); i++) {
+            if (System.currentTimeMillis() - explosionsTimes.elementAt(i) > explosionlifetime) {
+                try {
+                    explosions.remove(i);
+                    explosionsTimes.remove(i);
+                }
+                catch (java.lang.NullPointerException jlnpe) {
+                    explosions.clear();
+                    explosionsTimes.clear();
+                }
+            }
+            else {
+                if (expcount == 1) {
+                    g2d.drawImage(exp1, (int) (explosions.elementAt(i).getX() + 0.5),
+                            (int) (explosions.elementAt(i).getY() + 0.5), null);
+                    expcount = 2;
+                }
+                else if (expcount == 2) {
+                    g2d.drawImage(exp2, (int) (explosions.elementAt(i).getX() + 0.5),
+                            (int) (explosions.elementAt(i).getY() + 0.5), null);
+                    expcount = 1;
+                }
+            }
+        }
+    }
 
 
 
