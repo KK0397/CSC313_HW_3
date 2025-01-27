@@ -685,6 +685,166 @@ public class Asteroids {
         }
     }
 
+    private static class KeyPressed extends AbstractAction {
+        public KeyPressed() {
+            action = "";
+        }
+        public KeyPressed (String input) {
+            action = input;
+        }
 
+        public void actionPerformed (ActionEvent e) {
+            if (action.equals("UP")) {
+                upPressed = true;
+            }
+            if (action.equals("DOWN")) {
+                downPressed = true;
+            }
+            if (action.equals("LEFT")) {
+                leftPressed = true;
+            }
+            if (action.equals("RIGHT")) {
+                rightPressed = true;
+            }
+            if (action.equals("F")) {
+                firePressed = true;
+            }
+        }
+        private String action;
+    }
+
+    private static class KeyReleased extends AbstractAction {
+        public KeyReleased() {
+            action = "";
+        }
+
+        public KeyReleased (String input) {
+            action = input;
+        }
+
+        public void actionPerformed (ActionEvent e) {
+            if (action.equals("UP")) {
+                upPressed = false;
+            }
+            if (action.equals("DOWN")) {
+                downPressed = false;
+            }
+            if (action.equals("LEFT")) {
+                leftPressed = false;
+            }
+            if (action.equals("RIGHT")) {
+                rightPressed = false;
+            }
+            if (action.equals("F")) {
+                firePressed = false;
+            }
+        }
+        private String action;
+    }
+
+    private static class QuitGame implements ActionListener {
+        public void actionPerformed (ActionEvent e) {
+            endgame = true;
+        }
+    }
+
+    public static class StartGame implements ActionListener {
+        public void actionPerformed (ActionEvent e) {
+            endgame = true;
+            enemyAlive = true;
+
+            upPressed = false;
+            downPressed = false;
+            leftPressed = false;
+            rightPressed = false;
+            firePressed = false;
+
+            p1 = new ImageObject (p1originalX, p1originalY, p1width, p1height, 0.0);
+            p1velocity = 0.0;
+            generateEnemy();
+
+            flames = new ImageObject(p1originalX + p1width / 2.0, p1originalY + p1height, flamewidth, flamewidth, 0.0);
+            flamecount = 1;
+            expcount = 1;
+
+            try {
+                Thread.sleep(50);
+            }
+            catch (InterruptedException ie) {
+                // NOP
+            }
+
+            playerBullets = new Vector<ImageObject>();
+            playerBulletsTimes = new Vector<Long>();
+            enemyBullets = new Vector<ImageObject>();
+            enemyBulletsTimes = new Vector<ImageObject>();
+            explosions = new Vector<ImageObject>();
+            explosionsTimes = new Vector<Long>();
+            generateAsteroids();
+            endgame = false;
+
+            Thread t1 = new Thread(new Animate());
+            Thread t2 = new Thread(new PlayerMover());
+            Thread t3 = new Thread(new FlameMover());
+            Thread t4 = new Thread(new AsteroidsMover());
+            Thread t5 = new Thread(new PlayerBulletsMover());
+            Thread t6 = new Thread(new EnemyShipMover());
+            Thread t7 = new Thread(new EnemyBulletsMover());
+            Thread t8 = new Thread(new CollisionChecker());
+            Thread t9 = new Thread(new WinChecker());
+
+            t1.start();
+            t2.start();
+            t3.start();
+            t4.start();
+            t5.start();
+            t6.start();
+            t7.start();
+            t8.start();
+            t9.start();
+        }
+    }
+
+    private static class GameLevel implements ActionListener {
+        public int decodeLevel (String input) {
+            int ret = 3;
+            if (input.equals("One")) {
+                ret = 1;
+            }
+            else if (input.equals("Two")) {
+                ret = 2;
+            }
+            else if (input.equals("Three")) {
+                ret = 3;
+            }
+            else if (input.equals("Four")) {
+                ret = 4;
+            }
+            else if (input.equals("Five")) {
+                ret = 5;
+            }
+            else if (input.equals("Six")) {
+                ret = 6;
+            }
+            else if (input.equals("Seven")) {
+                ret = 7;
+            }
+            else if (input.equals("Eight")) {
+                ret = 8;
+            }
+            else if (input.equals("Nine")) {
+                ret = 9;
+            }
+            else if (input.equals("Ten")) {
+                ret = 10;
+            }
+            return ret;
+        }
+        public void actionPerformed (ActionEvent e) {
+            JComboBox cb = (JComboBox) e.getSource();
+            String textLevel = (String) cb.getSelectedItem();
+            level = decodeLevel(textLevel);
+        }
+    }
 
 }
