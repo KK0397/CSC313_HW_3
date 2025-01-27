@@ -847,4 +847,60 @@ public class Asteroids {
         }
     }
 
+    private static Boolean isInside(double p1x, double p1y, double p2x1,
+        double p2y1, double p2x2, double p2y2) {
+        Boolean ret = false;
+        if (p1x > p2x1 && p1x < p2x2) {
+            if (p1y > p2y1 && p1y < p2y2) {
+                ret = true;
+            }
+            if (p1y > p2y2 && p1y < p2y1) {
+                ret = true;
+            }
+        }
+        if (p1x > p2x2 && p1x < p2x1) {
+            if (p1y > p2y1 && p1y < p2y2) {
+                ret = true;
+            }
+            if (p1y > p2y2 && p1y < p2y1) {
+                ret = true;
+            }
+        }
+        return ret;
+    }
+
+    private static Boolean collisionOccursCoordinates (double p1x1, double p1y1,
+       double p1x2, double p1y2, double p2x1, double p2y1, double p2x2, double p2y2) {
+        Boolean ret = false;
+        if (isInside(p1x1, p1y1, p2x1, p2y1, p2x2, p2y2) == true ) {
+            ret = true;
+        }
+        if (isInside(p1x1, p1y2, p2x1, p2y1, p2x2, p2y2) == true ) {
+            ret = true;
+        }
+        if (isInside(p1x2, p1y1, p2x1, p2y1, p2x2, p2y2) == true ) {
+            ret = true;
+        }
+        if (isInside(p1x2, p1y2, p2x1, p2y1, p2x2, p2y2) == true ) {
+            ret = true;
+        }
+        if (isInside(p2x1, p2y1, p1x1, p1y1, p1x2, p1y2) == true ) {
+            ret = true;
+        }
+        if (isInside(p2x1, p2y2, p1x1, p1y1, p1x2, p1y2) == true ) {
+            ret = true;
+        }
+        if (isInside(p2x2, p2y1, p1x1, p1y1, p1x2, p1y2) == true ) {
+            ret = true;
+        }
+        if (isInside(p2x2, p2y2, p1x1, p1y1, p1x2, p1y2) == true ) {
+            ret = true;
+        }
+        return ret;
+    }
+
+    private static Boolean collisionOccurs (ImageObject obj1, ImageObject obj2) {
+        Boolean ret = false;
+    }
+
 }
