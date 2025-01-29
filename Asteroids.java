@@ -205,7 +205,7 @@ public class Asteroids {
                 }
 
                 p1.move(-p1velocity * Math.cos(p1.getAngle() -
-                        p1 / 2.0), p1velocity * Math.sin(p1.getAngle()
+                        pi / 2.0), p1velocity * Math.sin(p1.getAngle()
                 - pi / 2.0));
                 p1.screenWrap(XOFFSET, XOFFSET + WINWIDTH,
                         YOFFSET, YOFFSET + WINHEIGHT);
@@ -257,10 +257,10 @@ public class Asteroids {
                         else {
                             asteroids.elementAt(i).spin(spinstep);
                         }
-                        asteroids.elementAt(i)/move(-velocity *
+                        asteroids.elementAt(i).move(-velocity *
                                 Math.cos(asteroids.elementAt(i).getAngle() - pi / 2.0),
                                 velocity * Math.sin(asteroids.elementAt(i).getAngle() - pi / 2.0));
-                        asteroids.elementAt(i).screenWrap(XOFFSET, XOFFSET + WIDTH,
+                        asteroids.elementAt(i).screenWrap(XOFFSET, XOFFSET + WINWIDTH,
                                 YOFFSET, YOFFSET + WINHEIGHT);
                     }
                 }
@@ -363,9 +363,9 @@ public class Asteroids {
                     for (int i = 0; i < enemyBullets.size(); i++) {
                         enemyBullets.elementAt(i).move(-velocity * Math.cos(enemyBullets.elementAt(i).getAngle() - pi / 2.0),
                                 velocity * Math.sin(enemyBullets.elementAt(i).getAngle() - pi / 2.0));
-                        enemyBulllets.elementAt(i).screenWrap(XOFFSET, XOFFSET + WINWIDTH, YOFFSET, YOFFSET + WINHEIGHT);
+                        enemyBullets.elementAt(i).screenWrap(XOFFSET, XOFFSET + WINWIDTH, YOFFSET, YOFFSET + WINHEIGHT);
 
-                        if (System.currentTimeMillis() - elementBulletsTimes.elementAt(i) > enemybulletlifetime) {
+                        if (System.currentTimeMillis() - enemyBulletsTimes.elementAt(i) > enemybulletlifetime) {
                             enemyBullets.remove(i);
                             enemyBulletsTimes.remove(i);
                         }
@@ -408,7 +408,7 @@ public class Asteroids {
                                     asteroids.remove(i);
                                     asteroidsTypes.remove(i);
                                     playerBullets.remove(j);
-                                    playerBullesTimes.remove(j);
+                                    playerBulletsTimes.remove(j);
                                 }
 
                                 // create two new asteroids of type 3
@@ -418,15 +418,15 @@ public class Asteroids {
                                     asteroids.remove(i);
                                     asteroidsTypes.remove(i);
                                     playerBullets.remove(j);
-                                    playerBullesTimes.remove(j);
+                                    playerBulletsTimes.remove(j);
                                 }
 
                                 // delete asteroids
-                                if (asteroids.Types.elementAt(i) == 3) {
+                                if (asteroidsTypes.elementAt(i) == 3) {
                                     asteroids.remove(i);
                                     asteroidsTypes.remove(i);
                                     playerBullets.remove(j);
-                                    playerBullesTimes.remove(j);
+                                    playerBulletsTimes.remove(j);
                                 }
                             }
                         }
@@ -462,7 +462,7 @@ public class Asteroids {
 
                         // compare enemy ship to player
                         if (collisionOccurs(enemy, p1) == true) {
-                            endgame == true;
+                            endgame = true;
                             System.out.println("Game Over. You Lose!");
                         }
 
@@ -499,10 +499,10 @@ public class Asteroids {
     private static void generateAsteroids() {
         asteroids = new Vector<ImageObject>();
         asteroidsTypes = new Vector<Integer>();
-        RAndom randomNumbers = new Random(LocalTimes.now().getNano());
+        Random randomNumbers = new Random(LocalTime.now().getNano());
 
         for (int i = 0; i < level; i++) {
-            asteroids addElement(new ImageObject (XOFFSET +
+            asteroids.addElement(new ImageObject (XOFFSET +
                     (double) (randomNumbers.nextInt(WINWIDTH)), YOFFSET +
                     (double) (randomNumbers.nextInt(WINHEIGHT)), ast1width, ast1width,
                     (double) (randomNumbers.nextInt(360))));
@@ -524,18 +524,18 @@ public class Asteroids {
 
     // *dist is a distance between the two objects at the bottom of objInner
     private static void lockrotateObjAroundObjbottom (ImageObject objOuter, ImageObject objInner, double dist) {
-        objOuter.moteto(objInner.getX() + objOuter.getWidth() + (objInner.getWidth() / 2.0 +
+        objOuter.moveto(objInner.getX() + objOuter.getWidth() + (objInner.getWidth() / 2.0 +
                 (dist + objInner.getWidth() / 2.0) * Math.cos(-objInner.getAngle() + pi / 2.0))
-                / 2.0, objInner.getY() - objOuter.getHeight() + (dist + objInner.getHieght() / 2.0)
+                / 2.0, objInner.getY() - objOuter.getHeight() + (dist + objInner.getHeight() / 2.0)
                 * Math.sin(-objInner.getAngle() / 2.0));
         objOuter.setAngle(objInner.getAngle());
     }
 
     // *dist is a distance between the two objects at the top of the inner object
     private static void lockrotateObjAroundObjtop (ImageObject objOuter, ImageObject objInner, double dist) {
-        objOuter.moteto(objInner.getX() + objOuter.getWidth() + (objInner.getWidth() / 2.0 +
+        objOuter.moveto(objInner.getX() + objOuter.getWidth() + (objInner.getWidth() / 2.0 +
                 (dist + objInner.getWidth() / 2.0) * Math.cos(objInner.getAngle() + pi / 2.0))
-                / 2.0, objInner.getY() - objOuter.getHeight() + (dist + objInner.getHieght() / 2.0)
+                / 2.0, objInner.getY() - objOuter.getHeight() + (dist + objInner.getHeight() / 2.0)
                 * Math.sin(objInner.getAngle() / 2.0));
         objOuter.setAngle(objInner.getAngle());
     }
@@ -549,7 +549,7 @@ public class Asteroids {
 
     private static AffineTransformOp spinImageObject (ImageObject obj) {
         AffineTransform at = AffineTransform.getRotateInstance(-obj.getInternalAngle(),
-                obj.getWIdth() / 2.0, obj.getHeight() / 2.0);
+                obj.getWidth() / 2.0, obj.getHeight() / 2.0);
         AffineTransformOp atop = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
         return atop;
     }
@@ -587,7 +587,7 @@ public class Asteroids {
         Graphics2D g2D = (Graphics2D) g;
         try {
             for (int i = 0; i < playerBullets.size(); i ++) {
-                g2d.drawImage(rotateImageObject(playerBullets.elementAt(i)).filter(playerBullet, null),
+                g2D.drawImage(rotateImageObject(playerBullets.elementAt(i)).filter(playerBullet, null),
                         (int) (playerBullets.elementAt(i).getX() + 0.5), (int) (playerBullets.elementAt(i).getY() + 0.5), null);
             }
         }
@@ -673,12 +673,12 @@ public class Asteroids {
             }
             else {
                 if (expcount == 1) {
-                    g2d.drawImage(exp1, (int) (explosions.elementAt(i).getX() + 0.5),
+                    g2D.drawImage(exp1, (int) (explosions.elementAt(i).getX() + 0.5),
                             (int) (explosions.elementAt(i).getY() + 0.5), null);
                     expcount = 2;
                 }
                 else if (expcount == 2) {
-                    g2d.drawImage(exp2, (int) (explosions.elementAt(i).getX() + 0.5),
+                    g2D.drawImage(exp2, (int) (explosions.elementAt(i).getX() + 0.5),
                             (int) (explosions.elementAt(i).getY() + 0.5), null);
                     expcount = 1;
                 }
@@ -778,7 +778,7 @@ public class Asteroids {
             playerBullets = new Vector<ImageObject>();
             playerBulletsTimes = new Vector<Long>();
             enemyBullets = new Vector<ImageObject>();
-            enemyBulletsTimes = new Vector<ImageObject>();
+            enemyBulletsTimes = new Vector<Long>();
             explosions = new Vector<ImageObject>();
             explosionsTimes = new Vector<Long>();
             generateAsteroids();
@@ -902,7 +902,7 @@ public class Asteroids {
 
     private static Boolean collisionOccurs (ImageObject obj1, ImageObject obj2) {
         Boolean ret = false;
-        if (collisionOccursCoordinates(obj1.getX(), obj1.getY(), obj1.get() + obj1.getWdith(),
+        if (collisionOccursCoordinates(obj1.getX(), obj1.getY(), obj1.getX() + obj1.getWidth(),
             obj1.getY() + obj1.getHeight(), obj2.getX(), obj2.getY(), obj2.getX() + obj2.getWidth(),
             obj2.getY() + obj2.getHeight()) == true) {
             ret = true;
@@ -947,7 +947,7 @@ public class Asteroids {
             return internalangle;
         }
 
-        public void setAngle (double angleInput) {
+        public void setAngle (double angleinput) {
             angle = angleinput;
         }
 
@@ -993,7 +993,7 @@ public class Asteroids {
 
         public double getComX() {
             double ret = 0;
-            if (coords() > 0) {
+            if (coords.size() > 0) {
                 for (int i = 0; i < coords.size(); i = i + 2) {
                     ret = ret + coords.elementAt(i);
                 }
@@ -1004,7 +1004,7 @@ public class Asteroids {
 
         public double getComY() {
             double ret = 0;
-            if (coords.size()) {
+            if (coords.size() > 0) {
                 for (int i = 0; i < coords.size(); i = i + 2) {
                     ret = ret + coords.elementAt(i);
                 }
@@ -1023,14 +1023,14 @@ public class Asteroids {
             y = yinput;
         }
 
-        public void screenWrap (double leftEdge, double right Edge, double topEdge, double bottomEdge) {
+        public void screenWrap (double leftEdge, double rightEdge, double topEdge, double bottomEdge) {
             if (x > rightEdge) {
                 moveto(leftEdge, getY());
             }
             if (x < leftEdge) {
                 moveto(rightEdge, getY());
             }
-            if (y > bottomPage) {
+            if (y > bottomEdge) {
                 moveto(getX(), topEdge);
             }
             if (y < topEdge) {
@@ -1050,9 +1050,9 @@ public class Asteroids {
         }
 
         public void spin (double internalangleinput) {
-            internalangle = internal angle + internalangleinput;
+            internalangle = internalangle + internalangleinput;
             while (internalangle > twoPi) {
-                internalangle = internal angle - twoPi;
+                internalangle = internalangle - twoPi;
             }
 
             while (internalangle < 0) {
