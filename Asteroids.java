@@ -78,26 +78,26 @@ public class Asteroids {
         ast3width = 26;
 
         try {
-            background = ImageIO.read(newFile("space.png"));
+            background = ImageIO.read(new File("space.png"));
 
-            player = ImageIO.read(newFile("player.png"));
-            flame1 = ImageIO.read(newFile("flameleft.png"));
-            flame2 = ImageIO.read(newFile("flamecenter.png"));
-            flame3 = ImageIO.read(newFile("flameright.png"));
-            flame4 = ImageIO.read(newFile("blueflameleft.png"));
-            flame5 = ImageIO.read(newFile("blueflamecenter.png"));
-            flame6 = ImageIO.read(newFile("blueflameright.png"));
+            player = ImageIO.read(new File("player.png"));
+            flame1 = ImageIO.read(new File("flameleft.png"));
+            flame2 = ImageIO.read(new File("flamecenter.png"));
+            flame3 = ImageIO.read(new File("flameright.png"));
+            flame4 = ImageIO.read(new File("blueflameleft.png"));
+            flame5 = ImageIO.read(new File("blueflamecenter.png"));
+            flame6 = ImageIO.read(new File("blueflameright.png"));
 
-            ast1 = ImageIO.read(newFile("ast1.png"));
-            ast2 = ImageIO.read(newFile("ast2.png"));
-            ast3 = ImageIO.read(newFile("ast3.png"));
+            ast1 = ImageIO.read(new File("ast1.png"));
+            ast2 = ImageIO.read(new File("ast2.png"));
+            ast3 = ImageIO.read(new File("ast3.png"));
 
-            playerBullet = ImageIO.read(newFile("playerbullet.png"));
-            enemyShip = ImageIO.read(newFile("enemy.png"));
-            enemyBullet = ImageIO.read(newFile("enemybullet.png"));
+            playerBullet = ImageIO.read(new File("playerbullet.png"));
+            enemyShip = ImageIO.read(new File("enemy.png"));
+            enemyBullet = ImageIO.read(new File("enemybullet.png"));
 
-            exp1 = ImageIO.read(newFile("explosion1.png"));
-            exp2 = ImageIO.read(newFile("explosion2.png"));
+            exp1 = ImageIO.read(new File("explosion1.png"));
+            exp2 = ImageIO.read(new File("explosion2.png"));
         }
         catch(IOException ioe) {
             // NOP
