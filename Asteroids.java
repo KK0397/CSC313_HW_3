@@ -168,9 +168,9 @@ public class Asteroids
                 }
                 if (leftPressed == true) {
                     if (p1velocity < 0) {
-                        p1.rotate(rotatestep);
-                    } else {
                         p1.rotate(-rotatestep);
+                    } else {
+                        p1.rotate(rotatestep);
                     }
                 }
                 if (rightPressed == true) 
@@ -654,7 +654,7 @@ public class Asteroids
             p1velocity = 0.0;
     
             generateEnemy();
-    
+
             flames = new ImageObject(p1originalX + p1width / 2.0, p1originalY + p1height, flamewidth, flamewidth, 0.0);
             flamecount = 1;
             expcount = 1;
