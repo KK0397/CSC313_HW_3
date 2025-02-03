@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.AbstractAction;
 import javax.swing.JComboBox;
 
@@ -866,6 +867,10 @@ public class Asteroids extends JComponent
     
     private static class StartGame implements ActionListener {
         public void actionPerformed(ActionEvent e) {
+            
+
+            
+            
             endgame = true;
             enemyAlive = true;
     
@@ -1240,6 +1245,9 @@ public class Asteroids extends JComponent
                 
                 public static void main(String[] args) {
                     setup();
+
+                    
+
                     appFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     appFrame.setSize(501, 585);
                 
